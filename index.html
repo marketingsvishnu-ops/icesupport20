@@ -1,856 +1,589 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ice sports blog with live scores, match analysis, news and updates." />
-  <title>ice | Sports Blog & Live Updates</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FanZone Sports is an independent sports community featuring original analysis, fan discussions, match previews and responsible community posts.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#101827">
+  <link rel="canonical" href="https://www.yourdomain.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FanZone Sports Community">
+  <meta property="og:description" content="Original sports stories, analysis and respectful fan discussion.">
+  <meta property="og:url" content="https://www.yourdomain.com/">
+  <meta property="og:image" content="https://www.yourdomain.com/assets/social-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>FanZone Sports | News, Analysis & Community</title>
 
   <style>
     :root {
-      --primary: #7c3aed;
-      --primary-dark: #4c1d95;
-      --accent: #22c55e;
-      --danger: #ef4444;
-      --bg: #f7f7fb;
-      --card: #ffffff;
-      --text: #171923;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --soft: #f3e8ff;
-      --shadow: 0 12px 35px rgba(24, 24, 35, 0.08);
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --ink: #172033;
+      --muted: #647089;
+      --brand: #136f63;
+      --brand-dark: #0d5149;
+      --accent: #ffb703;
+      --line: #dfe5ee;
+      --danger: #a33a3a;
+      --radius: 18px;
+      --shadow: 0 12px 34px rgba(19, 32, 51, .09);
+      --max: 1180px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: Inter, Arial, sans-serif;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
       background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
-    img {
-      width: 100%;
-      display: block;
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+    button, input, textarea, select { font: inherit; }
+    .container { width: min(calc(100% - 32px), var(--max)); margin-inline: auto; }
+    .skip-link {
+      position: absolute; left: -9999px; top: 8px;
+      background: #fff; padding: 10px 14px; z-index: 999;
     }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    .container {
-      width: min(1180px, calc(100% - 32px));
-      margin: auto;
-    }
-
-    .top-strip {
-      background: #111827;
-      color: #d1d5db;
-      font-size: 0.84rem;
-    }
-
-    .top-strip-inner {
-      min-height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .breaking {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .breaking-label {
-      flex: 0 0 auto;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: var(--danger);
-      color: white;
-      font-weight: 900;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-    }
-
-    .breaking-text {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .skip-link:focus { left: 8px; }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(16, 24, 39, .97);
+      color: #fff;
+      position: sticky; top: 0; z-index: 50;
+      border-bottom: 1px solid rgba(255,255,255,.1);
     }
-
-    .navbar {
-      min-height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
+    .nav {
+      min-height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.65rem;
-      font-weight: 950;
-      color: var(--primary);
+    .logo {
+      text-decoration: none; font-weight: 900; font-size: 1.25rem; letter-spacing: -.02em;
+      display: flex; align-items: center; gap: 10px;
     }
-
-    .brand-logo {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      color: white;
-      background: linear-gradient(135deg, var(--primary), #ec4899);
-      box-shadow: 0 8px 22px rgba(124, 58, 237, 0.25);
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--accent); color: #111827;
     }
-
-    nav {
-      display: flex;
-      gap: 24px;
-      font-weight: 800;
-      color: #374151;
-    }
-
-    nav a:hover {
-      color: var(--primary);
-    }
-
-    .live-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 13px;
-      border-radius: 999px;
-      background: #fee2e2;
-      color: #b91c1c;
-      font-size: 0.84rem;
-      font-weight: 900;
-    }
-
-    .live-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--danger);
-      animation: pulse 1.2s infinite;
-    }
-
-    @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .45; transform: scale(1.35); }
+    nav ul { display: flex; gap: 22px; list-style: none; padding: 0; margin: 0; }
+    nav a { text-decoration: none; color: #d9e1ed; font-weight: 700; font-size: .94rem; }
+    nav a:hover, nav a:focus { color: #fff; }
+    .nav-cta {
+      background: var(--accent); color: #141414 !important;
+      padding: 9px 14px; border-radius: 999px;
     }
 
     .hero {
-      padding: 34px 0 22px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.55fr .85fr;
-      gap: 22px;
-    }
-
-    .featured-post,
-    .side-feature {
-      position: relative;
-      overflow: hidden;
-      min-height: 460px;
-      border-radius: 24px;
       background:
-        linear-gradient(to top, rgba(17,24,39,.94), rgba(17,24,39,.05) 70%),
-        linear-gradient(135deg, #312e81, #7c3aed 55%, #ec4899);
-      box-shadow: var(--shadow);
+        radial-gradient(circle at 85% 15%, rgba(255,183,3,.25), transparent 30%),
+        linear-gradient(135deg, #101827, #173f3a);
+      color: #fff;
+      padding: 80px 0 64px;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 42px; align-items: center; }
+    .eyebrow {
+      text-transform: uppercase; letter-spacing: .16em; font-size: .78rem;
+      font-weight: 900; color: #ffd36a;
+    }
+    h1 { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.03; margin: 14px 0 20px; letter-spacing: -.045em; }
+    .hero p { color: #d7e2e2; font-size: 1.1rem; max-width: 680px; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 18px; border-radius: 12px; text-decoration: none;
+      font-weight: 850; border: 1px solid transparent; cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: #15202b; }
+    .btn-secondary { border-color: rgba(255,255,255,.35); color: #fff; }
+    .hero-card {
+      background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.16);
+      padding: 24px; border-radius: 24px; backdrop-filter: blur(10px);
+    }
+    .hero-card h2 { margin-top: 0; font-size: 1.25rem; }
+    .stat-list { display: grid; gap: 12px; }
+    .stat {
+      background: rgba(255,255,255,.07); border-radius: 14px; padding: 14px;
+      display: flex; justify-content: space-between; gap: 20px;
     }
 
-    .featured-post::before,
-    .side-feature::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 18% 22%, rgba(255,255,255,.18), transparent 24%),
-        radial-gradient(circle at 85% 15%, rgba(34,197,94,.25), transparent 24%);
+    main section { padding: 68px 0; }
+    .section-head {
+      display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 26px;
     }
-
-    .featured-content {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-      padding: 32px;
-      color: white;
-    }
-
-    .post-tag {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: var(--primary);
-      color: white;
-      font-size: .74rem;
-      font-weight: 900;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-    }
-
-    .featured-content h1 {
-      max-width: 760px;
-      margin: 14px 0 12px;
-      font-size: clamp(2rem, 5vw, 4.25rem);
-      line-height: 1.03;
-    }
-
-    .featured-content p {
-      max-width: 680px;
-      color: #e5e7eb;
-      font-size: 1rem;
-    }
-
-    .post-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 16px;
-      color: #d1d5db;
-      font-size: .82rem;
-      font-weight: 700;
-    }
-
-    .hero-side {
-      display: grid;
-      gap: 22px;
-    }
-
-    .side-feature {
-      min-height: 219px;
-    }
-
-    .side-feature .featured-content {
-      padding: 22px;
-    }
-
-    .side-feature h2 {
-      margin-top: 10px;
-      font-size: 1.45rem;
-      line-height: 1.16;
-    }
-
-    main {
-      padding: 16px 0 60px;
-    }
+    .section-head h2 { margin: 0; font-size: clamp(1.75rem, 3vw, 2.55rem); letter-spacing: -.03em; }
+    .section-head p { color: var(--muted); margin: 0; max-width: 580px; }
 
     .ad-slot {
-      min-height: 96px;
-      display: grid;
-      place-items: center;
-      margin: 10px 0 28px;
-      padding: 18px;
-      border: 2px dashed #cbd5e1;
-      border-radius: 16px;
-      background: #eef2f7;
-      color: #64748b;
-      text-align: center;
+      border: 1px dashed #9aa7bb; background: #eef2f7; color: #536078;
+      min-height: 110px; border-radius: 14px; display: grid; place-items: center;
+      text-align: center; padding: 18px; margin: 28px auto;
+    }
+    .ad-slot strong { display: block; color: #37445a; }
+    .ad-slot small { display: block; margin-top: 4px; }
+
+    .featured-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 24px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+    }
+    .card-body { padding: 24px; }
+    .visual {
+      min-height: 240px; display: grid; place-items: center; text-align: center;
+      color: #fff; font-weight: 900; letter-spacing: .05em;
+      background: linear-gradient(135deg, #0d5149, #1a8275);
+    }
+    .visual.alt { background: linear-gradient(135deg, #293b64, #526aa0); min-height: 150px; }
+    .visual.warm { background: linear-gradient(135deg, #9a4e13, #d97f25); min-height: 150px; }
+    .tag {
+      display: inline-block; background: #e7f5f2; color: var(--brand-dark);
+      padding: 5px 9px; border-radius: 999px; font-weight: 850; font-size: .75rem;
+    }
+    .card h3 { font-size: 1.4rem; line-height: 1.25; margin: 14px 0 10px; }
+    .meta { color: var(--muted); font-size: .88rem; }
+    .read-link { color: var(--brand-dark); font-weight: 850; text-decoration-thickness: 2px; }
+    .stack { display: grid; gap: 22px; }
+
+    .community {
+      background: #eaf2f0;
+      border-top: 1px solid #d8e7e3; border-bottom: 1px solid #d8e7e3;
+    }
+    .post-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .post { padding: 22px; }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+      background: #dbe7ff; color: #29406c; font-weight: 900;
+    }
+    .author { display: flex; gap: 12px; align-items: center; }
+    .author strong, .author span { display: block; }
+    .author span { color: var(--muted); font-size: .82rem; }
+    .post-actions { display: flex; gap: 16px; color: var(--muted); font-size: .88rem; margin-top: 14px; }
+    .notice {
+      border-left: 4px solid var(--accent); background: #fff7da;
+      padding: 16px 18px; border-radius: 10px; margin-top: 24px;
     }
 
-    .ad-slot strong {
-      display: block;
-      color: #475569;
+    .columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .info-card { padding: 24px; }
+    .info-card h3 { margin-top: 0; }
+
+    .join-box {
+      display: grid; grid-template-columns: .8fr 1.2fr; gap: 36px;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 24px; padding: 32px; box-shadow: var(--shadow);
     }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 18px;
+    label { display: block; font-weight: 800; margin-bottom: 6px; }
+    input, textarea, select {
+      width: 100%; border: 1px solid #bdc7d5; border-radius: 10px;
+      padding: 11px 12px; background: #fff; color: var(--ink);
     }
+    textarea { min-height: 130px; resize: vertical; }
+    .field { margin-bottom: 16px; }
+    .form-note { color: var(--muted); font-size: .83rem; }
+    .form-status { min-height: 24px; color: var(--brand-dark); font-weight: 800; }
 
-    .section-head h2 {
-      font-size: 1.75rem;
+    .policy-section { background: #fff; }
+    .policy-grid { display: grid; grid-template-columns: 240px 1fr; gap: 32px; }
+    .policy-nav {
+      position: sticky; top: 100px; align-self: start;
+      border: 1px solid var(--line); border-radius: 14px; padding: 18px;
     }
+    .policy-nav a { display: block; padding: 8px 0; color: var(--brand-dark); font-weight: 750; }
+    .policy-content article { scroll-margin-top: 100px; margin-bottom: 44px; }
+    .policy-content h2 { border-bottom: 1px solid var(--line); padding-bottom: 10px; }
 
-    .section-head p {
-      color: var(--muted);
+    footer { background: #101827; color: #d7deea; padding: 48px 0 24px; }
+    .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 28px; }
+    footer h3 { color: #fff; }
+    footer a { color: #d7deea; }
+    .copyright { border-top: 1px solid rgba(255,255,255,.12); margin-top: 32px; padding-top: 20px; font-size: .88rem; }
+
+    @media (max-width: 860px) {
+      nav ul { display: none; }
+      .hero-grid, .featured-grid, .join-box, .policy-grid { grid-template-columns: 1fr; }
+      .post-grid, .columns { grid-template-columns: 1fr 1fr; }
+      .policy-nav { position: static; }
     }
-
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 34px;
-    }
-
-    .category-card {
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: white;
-      box-shadow: var(--shadow);
-      transition: .2s ease;
-    }
-
-    .category-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .category-icon {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
-    }
-
-    .category-card strong {
-      display: block;
-      font-size: 1.05rem;
-    }
-
-    .category-card span {
-      color: var(--muted);
-      font-size: .84rem;
-    }
-
-    .content-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
-      gap: 26px;
-    }
-
-    .posts-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .post-card {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: white;
-      box-shadow: var(--shadow);
-    }
-
-    .post-image {
-      min-height: 210px;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle at 25% 25%, rgba(255,255,255,.26), transparent 20%),
-        linear-gradient(135deg, #4c1d95, #7c3aed, #ec4899);
-      color: white;
-      font-size: 4rem;
-    }
-
-    .post-body {
-      padding: 20px;
-    }
-
-    .post-body h3 {
-      margin: 11px 0 9px;
-      font-size: 1.25rem;
-      line-height: 1.28;
-    }
-
-    .post-body p {
-      color: var(--muted);
-      font-size: .92rem;
-    }
-
-    .post-card .post-meta {
-      color: var(--muted);
-      margin-top: 14px;
-    }
-
-    .sidebar {
-      display: grid;
-      gap: 20px;
-      align-content: start;
-    }
-
-    .side-card {
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: white;
-      box-shadow: var(--shadow);
-    }
-
-    .side-card h3 {
-      margin-bottom: 14px;
-    }
-
-    .score-card {
-      border-top: 1px solid var(--border);
-      padding: 14px 0;
-    }
-
-    .score-card:first-of-type {
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .score-top {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: .78rem;
-      font-weight: 800;
-    }
-
-    .score-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 8px;
-      font-weight: 900;
-    }
-
-    .score-value {
-      color: var(--primary);
-    }
-
-    .news-list-item {
-      display: grid;
-      grid-template-columns: 76px 1fr;
-      gap: 12px;
-      padding: 13px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .news-list-item:first-of-type {
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .thumb {
-      min-height: 64px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: var(--soft);
-      font-size: 1.7rem;
-    }
-
-    .news-list-item p {
-      font-size: .9rem;
-      font-weight: 800;
-      line-height: 1.35;
-    }
-
-    .newsletter {
-      background: linear-gradient(135deg, #111827, #4c1d95);
-      color: white;
-    }
-
-    .newsletter p {
-      color: #d1d5db;
-      margin-bottom: 14px;
-      font-size: .9rem;
-    }
-
-    .newsletter-form {
-      display: grid;
-      gap: 10px;
-    }
-
-    .newsletter-form input,
-    .newsletter-form button {
-      width: 100%;
-      padding: 12px 13px;
-      border: 0;
-      border-radius: 11px;
-    }
-
-    .newsletter-form button {
-      cursor: pointer;
-      background: white;
-      color: var(--primary-dark);
-      font-weight: 900;
-    }
-
-    footer {
-      padding: 36px 0;
-      background: #111827;
-      color: #cbd5e1;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr 1fr;
-      gap: 30px;
-    }
-
-    footer h3,
-    footer h4 {
-      color: white;
-      margin-bottom: 10px;
-    }
-
-    footer a {
-      display: block;
-      width: fit-content;
-      margin: 7px 0;
-    }
-
-    .copyright {
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid #374151;
-      font-size: .86rem;
-    }
-
-    @media (max-width: 920px) {
-      nav {
-        display: none;
-      }
-
-      .hero-grid,
-      .content-grid,
-      .footer-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-side {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .categories {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 680px) {
-      .top-strip-inner {
-        min-height: 44px;
-      }
-
-      .top-strip-inner > span {
-        display: none;
-      }
-
-      .hero-side,
-      .posts-grid,
-      .categories {
-        grid-template-columns: 1fr;
-      }
-
-      .featured-post {
-        min-height: 430px;
-      }
-
-      .side-feature {
-        min-height: 230px;
-      }
-
-      .featured-content {
-        padding: 24px;
-      }
-
-      .live-pill {
-        display: none;
-      }
-
-      .section-head {
-        align-items: start;
-        flex-direction: column;
-      }
+    @media (max-width: 560px) {
+      .post-grid, .columns, .footer-grid { grid-template-columns: 1fr; }
+      .section-head { align-items: start; flex-direction: column; }
+      .hero { padding-top: 58px; }
+      .join-box { padding: 22px; }
     }
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "FanZone Sports",
+    "url": "https://www.yourdomain.com/",
+    "logo": "https://www.yourdomain.com/assets/logo.png",
+    "description": "An independent sports community publishing original analysis and moderated fan discussions.",
+    "email": "editor@yourdomain.com"
+  }
+  </script>
 </head>
 
 <body>
-  <div class="top-strip">
-    <div class="container top-strip-inner">
-      <div class="breaking">
-        <span class="breaking-label">Breaking</span>
-        <span class="breaking-text">India vs Australia live match mein exciting finish ki taraf badh raha hai.</span>
-      </div>
-      <span>Tuesday, Sports Desk</span>
-    </div>
-  </div>
+  <a class="skip-link" href="#main">Skip to main content</a>
 
   <header>
-    <div class="container navbar">
-      <a class="brand" href="#">
-        <span class="brand-logo">C</span>
-        <span>ice</span>
+    <div class="container nav">
+      <a class="logo" href="#home" aria-label="FanZone Sports home">
+        <span class="logo-mark">FS</span>
+        FanZone Sports
       </a>
-
-      <nav>
-        <a href="#home">Home</a>
-        <a href="#latest">Latest</a>
-        <a href="#scores">Live Scores</a>
-        <a href="#cricket">Cricket</a>
-        <a href="#football">Football</a>
+      <nav aria-label="Primary navigation">
+        <ul>
+          <li><a href="#stories">Stories</a></li>
+          <li><a href="#community">Community</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#policies">Policies</a></li>
+          <li><a class="nav-cta" href="#join">Join Community</a></li>
+        </ul>
       </nav>
-
-      <span class="live-pill">
-        <span class="live-dot"></span>
-        Live Updates
-      </span>
     </div>
   </header>
 
-  <section class="hero" id="home">
-    <div class="container hero-grid">
-      <article class="featured-post">
-        <div class="featured-content">
-          <span class="post-tag">Featured Story</span>
-          <h1>Big match ka pressure kis team ko le jayega victory ke kareeb?</h1>
-          <p>
-            ice ke match analysis mein dekhiye key players, team strategy aur
-            woh moments jo result ko completely change kar sakte hain.
-          </p>
-          <div class="post-meta">
-            <span>By ice Sports Desk</span>
-            <span>•</span>
-            <span>6 min read</span>
-            <span>•</span>
-            <span>2 hours ago</span>
-          </div>
-        </div>
-      </article>
-
-      <div class="hero-side">
-        <article class="side-feature">
-          <div class="featured-content">
-            <span class="post-tag">Cricket</span>
-            <h2>Top-order batting ne banaya match ka momentum</h2>
-            <div class="post-meta"><span>4 min read</span></div>
-          </div>
-        </article>
-
-        <article class="side-feature">
-          <div class="featured-content">
-            <span class="post-tag">Football</span>
-            <h2>Title race mein aaya unexpected twist</h2>
-            <div class="post-meta"><span>3 min read</span></div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <main class="container">
-    <div class="ad-slot">
-      <div>
-        <strong>Advertisement</strong>
-        Google AdSense banner code yahan paste karein
-      </div>
-    </div>
-
-    <section>
-      <div class="section-head">
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="container hero-grid">
         <div>
-          <h2>Explore Sports</h2>
-          <p>Apne favourite sport ki latest stories padhiye.</p>
+          <span class="eyebrow">Independent sports community</span>
+          <h1>Where fans discuss the game with respect.</h1>
+          <p>
+            Original match analysis, explainers, community opinions and thoughtful debate
+            across football, cricket, basketball and more.
+          </p>
+          <div class="button-row">
+            <a class="btn btn-primary" href="#stories">Read latest stories</a>
+            <a class="btn btn-secondary" href="#join">Submit a community post</a>
+          </div>
         </div>
-      </div>
-
-      <div class="categories">
-        <a class="category-card" href="#cricket">
-          <div class="category-icon">🏏</div>
-          <strong>Cricket</strong>
-          <span>Scores, analysis & news</span>
-        </a>
-
-        <a class="category-card" href="#football">
-          <div class="category-icon">⚽</div>
-          <strong>Football</strong>
-          <span>Leagues, transfers & matches</span>
-        </a>
-
-        <a class="category-card" href="#basketball">
-          <div class="category-icon">🏀</div>
-          <strong>Basketball</strong>
-          <span>Teams, games & highlights</span>
-        </a>
-
-        <a class="category-card" href="#latest">
-          <div class="category-icon">🔥</div>
-          <strong>Trending</strong>
-          <span>Most-read sports stories</span>
-        </a>
+        <aside class="hero-card" aria-label="Community standards summary">
+          <h2>Our publishing promise</h2>
+          <div class="stat-list">
+            <div class="stat"><span>Original editorial content</span><strong>Always</strong></div>
+            <div class="stat"><span>Community moderation</span><strong>Daily</strong></div>
+            <div class="stat"><span>Corrections policy</span><strong>Public</strong></div>
+            <div class="stat"><span>Paid content labeling</span><strong>Clear</strong></div>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <section class="content-grid">
-      <div>
-        <div class="section-head" id="latest">
+    <div class="container">
+      <!-- Replace this placeholder only after your ad account and placement are approved. -->
+      <div class="ad-slot" role="complementary" aria-label="Advertisement placeholder">
+        <div><strong>Advertisement</strong><small>Reserved ad placement — no deceptive clicks or navigation styling.</small></div>
+      </div>
+    </div>
+
+    <section id="stories">
+      <div class="container">
+        <div class="section-head">
           <div>
-            <h2>Latest Articles</h2>
-            <p>Fresh sports stories from ice.</p>
+            <span class="eyebrow" style="color:var(--brand)">Editorial</span>
+            <h2>Featured stories</h2>
+          </div>
+          <p>Sample editorial copy is included below. Replace every story with your own accurate, original reporting before applying.</p>
+        </div>
+
+        <div class="featured-grid">
+          <article class="card">
+            <div class="visual" role="img" aria-label="Abstract football tactics graphic">TACTICS BOARD</div>
+            <div class="card-body">
+              <span class="tag">Football analysis</span>
+              <h3>How compact midfield shapes create better counter-attacking chances</h3>
+              <p>
+                A compact midfield is not only defensive. When players remain connected,
+                they can regain possession with nearby passing options and move forward
+                before the opposition resets.
+              </p>
+              <p class="meta">By Editorial Team · Updated July 31, 2026 · 5 min read</p>
+              <a class="read-link" href="#sample-article">Read analysis</a>
+            </div>
+          </article>
+
+          <div class="stack">
+            <article class="card">
+              <div class="visual alt" role="img" aria-label="Abstract cricket strategy graphic">CRICKET IQ</div>
+              <div class="card-body">
+                <span class="tag">Cricket</span>
+                <h3>Three field-setting ideas every new fan should understand</h3>
+                <p class="meta">By Amina Rahman · 4 min read</p>
+                <a class="read-link" href="#sample-article">Read explainer</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="visual warm" role="img" aria-label="Abstract basketball development graphic">PLAYER DEVELOPMENT</div>
+              <div class="card-body">
+                <span class="tag">Basketball</span>
+                <h3>Why decision-making matters as much as shooting practice</h3>
+                <p class="meta">By Daniel Cole · 6 min read</p>
+                <a class="read-link" href="#sample-article">Read feature</a>
+              </div>
+            </article>
           </div>
         </div>
 
-        <div class="posts-grid">
-          <article class="post-card" id="cricket">
-            <div class="post-image">🏏</div>
-            <div class="post-body">
-              <span class="post-tag">Cricket</span>
-              <h3>Middle overs mein bowling strategy kyun hoti hai important?</h3>
-              <p>
-                Match ke sabse quiet phase mein captains kaise pressure build karte hain,
-                is simple analysis mein samjhiye.
-              </p>
-              <div class="post-meta">
-                <span>5 min read</span>
-                <span>•</span>
-                <span>Today</span>
-              </div>
+        <article id="sample-article" class="card" style="margin-top:28px">
+          <div class="card-body">
+            <span class="tag">Sample full article</span>
+            <h2>What makes a useful community match review?</h2>
+            <p class="meta">By Maya Singh, Community Editor · Published July 31, 2026</p>
+            <p>
+              A strong match review separates observation from emotion. Fans can disagree
+              about a manager, player or referee, but the discussion becomes more useful
+              when each opinion includes a specific moment, tactical pattern or verified statistic.
+            </p>
+            <h3>Start with what happened</h3>
+            <p>
+              Describe the major phases of the contest without copying another publisher.
+              Note changes in tempo, pressing, possession or shot selection, and explain why
+              those changes mattered.
+            </p>
+            <h3>Credit every source</h3>
+            <p>
+              Statistics, quotes and photographs should have clear sources and valid usage
+              rights. Never present rumors as confirmed facts. When a report is developing,
+              label it clearly and update the article when reliable information changes.
+            </p>
+            <h3>Invite constructive disagreement</h3>
+            <p>
+              End with a focused question. Moderators should remove threats, hate speech,
+              targeted harassment, spam and personal information while allowing good-faith
+              criticism and competing opinions.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="community" id="community">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow" style="color:var(--brand)">Fan voices</span>
+            <h2>Community posts</h2>
+          </div>
+          <p>Posts are reviewed before publication. Display names below are fictional examples.</p>
+        </div>
+
+        <div class="post-grid">
+          <article class="card post">
+            <div class="author">
+              <div class="avatar">JK</div>
+              <div><strong>Jordan K.</strong><span>Football community member</span></div>
             </div>
+            <p>My key takeaway was the full-backs moving inside during buildup. It gave the midfield safer passing angles.</p>
+            <div class="post-actions"><span>12 helpful</span><span>4 replies</span></div>
           </article>
 
-          <article class="post-card" id="football">
-            <div class="post-image">⚽</div>
-            <div class="post-body">
-              <span class="post-tag">Football</span>
-              <h3>High press system ka match result par kya impact padta hai?</h3>
-              <p>
-                Modern football mein aggressive pressing teams ko advantage kaise deti
-                hai, tactical breakdown ke saath padhiye.
-              </p>
-              <div class="post-meta">
-                <span>4 min read</span>
-                <span>•</span>
-                <span>Today</span>
-              </div>
+          <article class="card post">
+            <div class="author">
+              <div class="avatar">SR</div>
+              <div><strong>Samira R.</strong><span>Cricket community member</span></div>
             </div>
+            <p>The turning point was disciplined length rather than raw pace. The batting side never settled into a scoring rhythm.</p>
+            <div class="post-actions"><span>9 helpful</span><span>2 replies</span></div>
           </article>
 
-          <article class="post-card" id="basketball">
-            <div class="post-image">🏀</div>
-            <div class="post-body">
-              <span class="post-tag">Basketball</span>
-              <h3>Last quarter mein composure hi kyun decide karta hai winner?</h3>
-              <p>
-                Close games mein decision-making, substitutions aur defensive discipline
-                kitni important hoti hai.
-              </p>
-              <div class="post-meta">
-                <span>3 min read</span>
-                <span>•</span>
-                <span>Yesterday</span>
-              </div>
+          <article class="card post">
+            <div class="author">
+              <div class="avatar">MT</div>
+              <div><strong>Marco T.</strong><span>Basketball community member</span></div>
             </div>
+            <p>The second unit changed the game by defending without fouling and making the extra pass on offense.</p>
+            <div class="post-actions"><span>15 helpful</span><span>6 replies</span></div>
           </article>
+        </div>
 
-          <article class="post-card">
-            <div class="post-image">🏆</div>
-            <div class="post-body">
-              <span class="post-tag">Opinion</span>
-              <h3>Sports fans ke liye live updates ka experience kaise better ho?</h3>
-              <p>
-                Fast scores, clean design aur useful context milkar ek strong sports
-                platform banate hain.
-              </p>
-              <div class="post-meta">
-                <span>6 min read</span>
-                <span>•</span>
-                <span>Yesterday</span>
-              </div>
-            </div>
+        <div class="notice">
+          <strong>Community rule:</strong> Debate ideas, not identities. No hate speech,
+          threats, harassment, sexual content, graphic violence, spam, misinformation,
+          illegal content or copyrighted material you do not own.
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow" style="color:var(--brand)">Trust and transparency</span>
+            <h2>About FanZone Sports</h2>
+          </div>
+        </div>
+        <div class="columns">
+          <article class="card info-card">
+            <h3>Editorial mission</h3>
+            <p>We publish original sports analysis and provide a moderated place for supporters to exchange informed opinions.</p>
+          </article>
+          <article class="card info-card">
+            <h3>Ownership</h3>
+            <p>FanZone Sports is independently operated by <strong>[Legal owner or company name]</strong>. Add your real business address and registration details here.</p>
+          </article>
+          <article class="card info-card">
+            <h3>Contact</h3>
+            <p>Email: <a href="mailto:editor@yourdomain.com">editor@yourdomain.com</a><br>
+            Support: <a href="mailto:support@yourdomain.com">support@yourdomain.com</a><br>
+            Response target: 2 business days.</p>
           </article>
         </div>
       </div>
+    </section>
 
-      <aside class="sidebar">
-        <div class="side-card" id="scores">
-          <h3>Live Scores</h3>
-
-          <div class="score-card">
-            <div class="score-top">
-              <span>T20 International</span>
-              <span style="color:#b91c1c;">LIVE</span>
-            </div>
-            <div class="score-line">
-              <span>India</span>
-              <span class="score-value dynamic-score" data-runs="156" data-wickets="3">156/3</span>
-            </div>
-            <div class="score-line">
-              <span>Australia</span>
-              <span>190/7</span>
-            </div>
-          </div>
-
-          <div class="score-card">
-            <div class="score-top">
-              <span>Premier Football</span>
-              <span style="color:#b91c1c;">72'</span>
-            </div>
-            <div class="score-line">
-              <span>Blue City</span>
-              <span>2</span>
-            </div>
-            <div class="score-line">
-              <span>Red United</span>
-              <span>1</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="ad-slot" style="min-height:250px; margin:0;">
+    <section id="join">
+      <div class="container">
+        <div class="join-box">
           <div>
-            <strong>Sidebar Advertisement</strong>
-            300 × 250 ad unit
-          </div>
-        </div>
-
-        <div class="side-card">
-          <h3>Popular Posts</h3>
-
-          <div class="news-list-item">
-            <div class="thumb">🏏</div>
-            <p>Powerplay mein quick wickets ka match par impact</p>
-          </div>
-
-          <div class="news-list-item">
-            <div class="thumb">⚽</div>
-            <p>Season ke five most exciting football fixtures</p>
+            <span class="eyebrow" style="color:var(--brand)">Contribute</span>
+            <h2>Submit a community post</h2>
+            <p>
+              Share an original match reaction, tactical observation or sports explainer.
+              Submissions are moderated and publication is not guaranteed.
+            </p>
+            <p class="form-note">
+              Connect this form to a secure backend before launch. Do not collect personal
+              data without a clear purpose, consent and retention policy.
+            </p>
           </div>
 
-          <div class="news-list-item">
-            <div class="thumb">🏀</div>
-            <p>Young players jo is season surprise kar sakte hain</p>
-          </div>
-        </div>
-
-        <div class="side-card newsletter">
-          <h3>ice Newsletter</h3>
-          <p>Daily sports headlines aur match updates inbox mein paaiye.</p>
-          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
-            <input type="email" placeholder="Your email address" required />
-            <button type="submit">Subscribe</button>
+          <form id="community-form">
+            <div class="field">
+              <label for="display-name">Display name</label>
+              <input id="display-name" name="display-name" maxlength="40" required>
+            </div>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="sport">Sport</label>
+              <select id="sport" name="sport" required>
+                <option value="">Choose one</option>
+                <option>Football</option>
+                <option>Cricket</option>
+                <option>Basketball</option>
+                <option>Tennis</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="post">Original post</label>
+              <textarea id="post" name="post" minlength="80" maxlength="1200" required></textarea>
+            </div>
+            <div class="field">
+              <label><input type="checkbox" required style="width:auto"> I own this content and accept the Community Guidelines.</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit for review</button>
+            <p id="form-status" class="form-status" aria-live="polite"></p>
           </form>
         </div>
-      </aside>
+      </div>
+    </section>
+
+    <section class="policy-section" id="policies">
+      <div class="container policy-grid">
+        <aside class="policy-nav">
+          <strong>Site policies</strong>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Use</a>
+          <a href="#guidelines">Community Guidelines</a>
+          <a href="#editorial">Editorial Policy</a>
+          <a href="#cookies">Cookie Notice</a>
+        </aside>
+
+        <div class="policy-content">
+          <article id="privacy">
+            <h2>Privacy Policy</h2>
+            <p><strong>Last updated:</strong> July 31, 2026</p>
+            <p>
+              FanZone Sports may collect information you submit, such as your display name,
+              email address and community post. We use it to review submissions, operate the
+              community, prevent abuse and respond to support requests.
+            </p>
+            <p>
+              Hosting, analytics, security and advertising providers may process limited
+              technical data such as IP address, browser type, device information and page
+              interactions. Name every provider you actually use and explain its purpose.
+            </p>
+            <p>
+              We do not sell personal information. We retain submission records only as long
+              as reasonably necessary for moderation, legal and security purposes. Contact
+              <a href="mailto:privacy@yourdomain.com">privacy@yourdomain.com</a> to request
+              access, correction or deletion, subject to applicable law.
+            </p>
+          </article>
+
+          <article id="terms">
+            <h2>Terms of Use</h2>
+            <p>
+              You may use this website for lawful, personal purposes. You must not interfere
+              with site security, impersonate others, scrape content without permission,
+              upload malicious code or submit content that violates law or third-party rights.
+            </p>
+            <p>
+              Contributors keep ownership of their submissions but grant FanZone Sports a
+              non-exclusive license to review, edit for clarity, publish, display and promote
+              accepted posts. We may reject or remove content that violates these terms.
+            </p>
+            <p>
+              Sports information is provided for general information and commentary. It is
+              not betting, medical, legal or financial advice. We do not guarantee outcomes,
+              scores or the accuracy of third-party data.
+            </p>
+          </article>
+
+          <article id="guidelines">
+            <h2>Community Guidelines</h2>
+            <p>Community posts must be original, relevant and respectful. The following are prohibited:</p>
+            <ul>
+              <li>Hate speech, threats, bullying, harassment or dehumanizing language.</li>
+              <li>Graphic violence, sexual exploitation or content involving child abuse.</li>
+              <li>Spam, scams, malware, fake engagement or misleading links.</li>
+              <li>Private personal information, doxxing or impersonation.</li>
+              <li>Unverified accusations presented as fact or deliberately manipulated media.</li>
+              <li>Copyrighted text, images or video submitted without permission.</li>
+              <li>Instructions facilitating illegal activity or dangerous wrongdoing.</li>
+            </ul>
+            <p>
+              Users can report content at <a href="mailto:moderation@yourdomain.com">moderation@yourdomain.com</a>.
+              Moderation decisions may include editing, rejection, removal, account restriction
+              or referral to appropriate authorities where legally required.
+            </p>
+          </article>
+
+          <article id="editorial">
+            <h2>Editorial and Corrections Policy</h2>
+            <p>
+              Editorial articles should identify their author, publication date and meaningful
+              updates. Facts should be checked against credible primary sources where possible.
+              Opinion, sponsored content and developing reports must be labeled clearly.
+            </p>
+            <p>
+              Corrections are added promptly and should explain the material change. Send
+              correction requests to <a href="mailto:editor@yourdomain.com">editor@yourdomain.com</a>.
+            </p>
+          </article>
+
+          <article id="cookies">
+            <h2>Cookie Notice</h2>
+            <p>
+              This site may use essential cookies for security and preferences. Analytics and
+              advertising cookies should not be activated until the user has received legally
+              required information and choices. Add a consent-management platform appropriate
+              to the countries you serve and list each active cookie category here.
+            </p>
+          </article>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -858,51 +591,33 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <h3>ice</h3>
-          <p>Sports stories, match analysis, live scores and original updates.</p>
+          <h3>FanZone Sports</h3>
+          <p>Independent sports analysis and moderated community discussion.</p>
         </div>
-
         <div>
-          <h4>Categories</h4>
-          <a href="#cricket">Cricket</a>
-          <a href="#football">Football</a>
-          <a href="#basketball">Basketball</a>
+          <h3>Editorial</h3>
+          <p><a href="#stories">Stories</a><br><a href="#community">Community</a><br><a href="#about">About us</a></p>
         </div>
-
         <div>
-          <h4>Legal</h4>
-          <a href="#">About Us</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms & Conditions</a>
-          <a href="#">Contact</a>
+          <h3>Legal</h3>
+          <p><a href="#privacy">Privacy</a><br><a href="#terms">Terms</a><br><a href="#guidelines">Guidelines</a></p>
         </div>
       </div>
-
       <div class="copyright">
-        © <span id="year"></span> ice. All rights reserved.
+        © <span id="year"></span> FanZone Sports. All rights reserved.
+        FanZone Sports is not affiliated with any league, club or governing body unless expressly stated.
       </div>
     </div>
   </footer>
 
   <script>
-    const dynamicScore = document.querySelector(".dynamic-score");
-
-    setInterval(() => {
-      let runs = Number(dynamicScore.dataset.runs);
-      let wickets = Number(dynamicScore.dataset.wickets);
-
-      runs += Math.floor(Math.random() * 7);
-
-      if (Math.random() > 0.93 && wickets < 10) {
-        wickets += 1;
-      }
-
-      dynamicScore.dataset.runs = runs;
-      dynamicScore.dataset.wickets = wickets;
-      dynamicScore.textContent = `${runs}/${wickets}`;
-    }, 5000);
-
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.getElementById("community-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      document.getElementById("form-status").textContent =
+        "Demo only: connect this form to a secure moderation backend before publishing.";
+    });
   </script>
 </body>
 </html>
